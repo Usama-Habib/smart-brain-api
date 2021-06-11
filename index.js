@@ -154,9 +154,13 @@ app.put('/image',(req,res)=>{
     .catch(err => res.status(400).json('Error getting user'))
 })
 
-app.listen(process.env.PORT || 3000 , ()=>{
-    console.log(`Listning at http://localhost:${process.env.PORT}`)
-})
+// app.listen(process.env.PORT || 3000 , ()=>{
+//     console.log(`Listning at http://localhost:${process.env.PORT}`)
+// })
+
+app.listen(process.env.PORT || 3000, function(){
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+});
 
 // OPERATION METHOD->RETURN
 // ROOT GET->USERS

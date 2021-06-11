@@ -69,10 +69,7 @@ app.post('/imageUrl', (req,res) => {
 })
 
 app.get('/',(req,res) =>{
-    knex.select('*').from('users')
-    .then(user => {
-        res.json(user)
-    })
+    res.json("It is working...")
 })
 
 app.post('/signin',(req,res) => {
@@ -157,7 +154,7 @@ app.put('/image',(req,res)=>{
     .catch(err => res.status(400).json('Error getting user'))
 })
 
-app.listen( process.env.PORT || port, ()=>{
+app.listen( process.env.PORT || port , ()=>{
     console.log(`Listning at http://localhost:${process.env.PORT}`)
 })
 

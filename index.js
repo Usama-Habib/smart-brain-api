@@ -154,7 +154,7 @@ app.put('/image',(req,res)=>{
     .catch(err => res.status(400).json('Error getting user'))
 })
 
-app.listen( process.env.PORT || port , ()=>{
+app.listen(process.env.PORT || 3000 , ()=>{
     console.log(`Listning at http://localhost:${process.env.PORT}`)
 })
 

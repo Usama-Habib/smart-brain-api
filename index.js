@@ -14,7 +14,7 @@ const clarifai_app = new Clarifai.App({
 });
 
 const knex = require('knex')({
-  client: 'mysql',
+  client: 'pg',
   connection: {
      connectionString: process.env.DATABASE_URL,
       ssl: {

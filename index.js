@@ -16,8 +16,10 @@ const clarifai_app = new Clarifai.App({
 const knex = require('knex')({
   client: 'mysql',
   connection: {
-    connectionString : process.env.DATABASE_URL,
-    ssl: true
+     connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false
+      }
     // user : 'root',
     // password : 'usama',
     // database : 'smartbrain'

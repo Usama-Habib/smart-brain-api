@@ -119,32 +119,53 @@ app.post('/register',(req,res) => {
         return res.status(400).json("Incorrect Form Submission")
     }
     const hash = bcrypt.hashSync(password, saltRounds);
-
 knex.transaction(trx => {
-    trx
-    .insert({
-        email: email, 
-        hash: hash 
+      trx.insert({
+        hash: hash,
+        email: email
+      })
+      .into('login')
+      .returning('email')
+      .then(loginEmail => {
+        return trx('users')
+          .returning('*')
+          .insert({
+            email: loginEmail[0],
+            name: name,
+            joined: new Date()
+          })
+          .then(user => {
+            res.json(user[0]);
+          })
+      })
+      .then(trx.commit)
+      .catch(trx.rollback)
     })
-    .into('login')
-    .then(response_id => {
-        return trx.select('*').from('login').where({id:response_id[0]})
-        .then(user => {
-           return trx('users')
-            .insert({
-                name: name, 
-                email:user[0].email,
-                joined: new Date() 
-            })
-        })
-        .then(results => {
-            trx.select('*').from('users').where({id:results[0]})
-            .then(resp => res.json(resp[0]))
-        })
-    })
-    .then(trx.commit)
-    .catch(trx.rollback)
-    })
+// knex.transaction(trx => {
+//     trx
+//     .insert({
+//         email: email, 
+//         hash: hash 
+//     })
+//     .into('login')
+//     .then(response_id => {
+//         return trx.select('*').from('login').where({id:response_id[0]})
+//         .then(user => {
+//            return trx('users')
+//             .insert({
+//                 name: name, 
+//                 email:user[0].email,
+//                 joined: new Date() 
+//             })
+//         })
+//         .then(results => {
+//             trx.select('*').from('users').where({id:results[0]})
+//             .then(resp => res.json(resp[0]))
+//         })
+//     })
+//     .then(trx.commit)
+//     .catch(trx.rollback)
+//     })
 })
 
 app.get('/profile/:id',(req,res)=>{

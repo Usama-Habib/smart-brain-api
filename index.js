@@ -80,13 +80,12 @@ app.post('/signin',(req,res) => {
      if(!email || !password){
         return res.status(400).json("Incorrect Form Submission")
     }
-
      knex.select('email', 'hash').from('login')
     .where('email', '=', email)
     .then(data => {
       const isValid = bcrypt.compareSync(password, data[0].hash);
       if (isValid) {
-        return db.select('*').from('users')
+        return knex.select('*').from('users')
           .where('email', '=', email)
           .then(user => {
             res.json(user[0])
@@ -96,20 +95,6 @@ app.post('/signin',(req,res) => {
         res.status(400).json('wrong credentials')
       }
     })
-
-    //  knex.select('*').from('login').where({email})
-    // .then(user => {
-    //     const isValid = bcrypt.compareSync(password, user[0].hash);
-    //     if(isValid){
-    //         return knex.select('*').from('users').where({email})
-    //         .then(data => {
-    //             res.json(data[0])
-    //         })
-    //         .catch(err => res.status(400).json('unable to get user'))
-    //     }else{
-    //         res.status(400).json("Username and Password combination is wrong")
-    //     }
-    // })
     .catch(err => res.status(400).json('Error getting user'))
 })
 
